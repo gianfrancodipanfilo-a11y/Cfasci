@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;font-size:14px;line-height:1.75;display:flex;min-height:100vh;background:#fff;color:#1a1a18}
+nav{width:200px;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;background:#f5f4f0;border-right:1px solid rgba(0,0,0,.1);padding:.8rem .5rem}
+nav h2{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#888;padding:.2rem .4rem;margin-bottom:.3rem}
+nav a{display:block;padding:.3rem .5rem;border-radius:5px;font-size:13px;color:#5f5e5a;text-decoration:none;line-height:1.4}
+nav a.sub{padding-left:1rem;font-size:12px}
+nav a:hover{background:#eeedea;color:#1a1a18}
+main{flex:1;padding:1.5rem 1.75rem 3rem;max-width:860px;overflow-x:hidden}
+h1{font-size:23px;font-weight:600;margin-bottom:3px}
+.tag{color:#888;font-size:13px;margin-bottom:1.5rem;display:block}
+h2{font-size:17px;font-weight:600;margin:2rem 0 .6rem;padding-bottom:5px;border-bottom:1px solid rgba(0,0,0,.1);display:flex;align-items:center;gap:8px;scroll-margin-top:1rem}
+h2::before{content:'';display:inline-block;width:4px;height:17px;background:#185FA5;border-radius:2px;flex-shrink:0}
+h3{font-size:14px;font-weight:600;margin:1.1rem 0 .4rem}
+p{margin-bottom:.5rem}
+.fb{background:#f5f4f0;border-left:3px solid #185FA5;border-radius:0 7px 7px 0;padding:.65rem .9rem;margin:.65rem 0;font-family:monospace;font-size:13px}
+.fb .lbl{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#888;display:block;margin-bottom:3px}
+.note{background:#FAEEDA;color:#633806;border-left:3px solid #854F0B;border-radius:0 7px 7px 0;padding:.5rem .7rem;margin:.5rem 0;font-size:13px}
+.tip{background:#E1F5EE;color:#0F6E56;border-left:3px solid #0F6E56;border-radius:0 7px 7px 0;padding:.5rem .7rem;margin:.5rem 0;font-size:13px}
+.ex{border:1px solid rgba(0,0,0,.1);border-radius:11px;overflow:hidden;margin:1.3rem 0}
+.ex-head{padding:.6rem 1rem;display:flex;align-items:center;gap:9px;border-bottom:1px solid rgba(0,0,0,.08)}
+.pill{font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px}
+.own{background:#E6F1FB;color:#0C447C}
+.imp{background:#E1F5EE;color:#085041}
+.mix{background:#FBEAF0;color:#72243E}
+.ex-body{padding:.9rem 1rem}
+.step{display:flex;gap:9px;align-items:flex-start;margin:.45rem 0;font-size:13px}
+.sn{width:21px;height:21px;border-radius:50%;background:#E6F1FB;color:#0C447C;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.res{background:#EAF3DE;color:#175309;border-radius:7px;padding:.4rem .65rem;font-size:13px;font-weight:700;margin:.4rem 0;font-family:monospace}
+canvas{display:block;width:100%;margin-top:14px;border-radius:8px;border:.5px solid rgba(0,0,0,.12)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin:.65rem 0}
+th{background:#f5f4f0;padding:6px 9px;font-weight:600;border-bottom:1px solid rgba(0,0,0,.18);text-align:left}
+td{padding:6px 9px;border-bottom:.5px solid rgba(0,0,0,.08);vertical-align:top}
+hr{border:none;border-top:1px solid rgba(0,0,0,.09);margin:1.8rem 0}
+</style>
+</head>
+<body>
+<nav>
+  <h2>Contenuti</h2>
+  <a href="#intro">Introduzione</a>
+  <a href="#prereq">1. Prerequisiti</a>
+  <a href="#def">2. Definizione</a>
+  <a href="#asse">3. Asse radicale</a>
+  <a href="#tipi">4. Tipi di fascio</a>
+  <a href="#esempi">5. Esempi svolti</a>
+  <a href="#es1" class="sub">Es.1 · Centro su asse y</a>
+  <a href="#es2" class="sub">Es.2 · Punto assegnato</a>
+  <a href="#es3" class="sub">Es.3 · Raggio assegnato</a>
+  <a href="#es4" class="sub">Es.4 · Centro su bisettrice</a>
+  <a href="#es5" class="sub">Es.5 · Tangente a retta</a>
+  <a href="#es6" class="sub">Es.6 · Imp. centro su retta</a>
+  <a href="#es7" class="sub">Es.7 · Imp. tangente</a>
+  <a href="#es8" class="sub">Es.8 · Punti base</a>
+  <a href="#schema">6. Schema riassuntivo</a>
+</nav>
+
+<main>
+<div id="intro">
+  <h1>Fasci di Circonferenze</h1>
+  <span class="tag">Guida didattica completa · 8 esempi svolti · Geometria Analitica</span>
+</div>
+
+<h2 id="prereq">1. Prerequisiti: la circonferenza</h2>
+<p>La <em>forma implicita</em> di una circonferenza è:</p>
+<div class="fb"><span class="lbl">Equazione generale</span>x² + y² + Dx + Ey + F = 0<br>Centro: C = (–D/2, –E/2) &nbsp;&nbsp; Raggio: r = √(D²+E²–4F) / 2</div>
+<div class="note"><b>Condizione di esistenza:</b> D²+E²–4F &gt; 0.</div>
+<canvas id="g0"></canvas>
+
+<h2 id="def">2. Definizione di fascio</h2>
+<p>Date due generatrici C₁ e C₂, si chiama <em>fascio</em> la famiglia:</p>
+<div class="fb"><span class="lbl">Equazione del fascio (λ ∈ ℝ)</span>C₁ + λ · C₂ = 0<br>(1+λ)(x²+y²) + (D₁+λD₂)x + (E₁+λE₂)y + (F₁+λF₂) = 0</div>
+<p>Per <b>λ ≠ –1</b> si ottiene una circonferenza. Per <b>λ = –1</b> si ottiene l'asse radicale.</p>
+<div class="tip"><b>Proprietà fondamentale.</b> Ogni circonferenza del fascio passa per i punti di intersezione di C₁ e C₂ (se reali).</div>
+<canvas id="g1"></canvas>
+
+<h2 id="asse">3. L'asse radicale</h2>
+<p>Ponendo λ=–1 (ovvero C₁–C₂=0):</p>
+<div class="fb"><span class="lbl">Asse radicale</span>(D₁–D₂)x + (E₁–E₂)y + (F₁–F₂) = 0</div>
+<table><thead><tr><th>Posizione relativa</th><th>Significato geometrico</th></tr></thead>
+<tbody><tr><td>Secanti in P e Q</td><td>Retta PQ</td></tr>
+<tr><td>Tangenti in P</td><td>Tangente comune in P</td></tr>
+<tr><td>Non intersecanti</td><td>Luogo dei punti di uguale potenza</td></tr></tbody></table>
+<div class="note">L'asse radicale è sempre <em>perpendicolare</em> alla retta dei centri O₁O₂.</div>
+<canvas id="g2"></canvas>
+
+<h2 id="tipi">4. Tipi di fascio</h2>
+<h3>4a. Fascio proprio — generatrici secanti</h3>
+<p>Tutte le ∞¹ circonferenze passano per P e Q. L'asse radicale è la retta PQ.</p>
+<h3>4b. Fascio proprio — generatrici tangenti</h3>
+<p>Tutte le circonferenze sono tangenti alla stessa retta in P. L'asse radicale è la tangente comune in P.</p>
+<h3>4c. Fascio improprio</h3>
+<div class="fb"><span class="lbl">Fascio improprio</span>C + λ · r = 0<br>x² + y² + Dx + Ey + F + λ(ax+by+c) = 0</div>
+<div class="tip"><b>Vantaggio pratico:</b> il coefficiente di x²+y² è sempre 1 — non si deve mai dividere.</div>
+<canvas id="g3"></canvas>
+
+<hr>
+<h2 id="esempi">5. Esempi svolti</h2>
+
+<div class="ex" id="es1">
+  <div class="ex-head"><span class="pill own">Esempio 1</span><span style="font-size:13px;font-weight:500">Fascio proprio · Secanti · Centro sull'asse y</span></div>
+  <div class="ex-body">
+    <div class="fb">C₁: x²+y²–4x–2y–4=0 &nbsp; O₁=(2,1) r₁=3<br>C₂: x²+y²–6x+4y+4=0 &nbsp; O₂=(3,–2) r₂=3</div>
+    <p><b>Richiesta:</b> trovare la circonferenza con centro sull'asse delle ordinate.</p>
+    <div class="step"><span class="sn">1</span><span>d(O₁,O₂)=√10≈3.16, |r₁–r₂|=0 &lt; √10 &lt; 6 → <b>secanti</b> ✓</span></div>
+    <div class="step"><span class="sn">2</span><span><b>Asse radicale:</b> C₁–C₂=0 → 2x–6y–8=0 → x–3y–4=0</span></div>
+    <div class="step"><span class="sn">3</span><span><b>Centro generico:</b> Xc=(4+6λ)/[2(1+λ)], Yc=(2–4λ)/[2(1+λ)]</span></div>
+    <div class="step"><span class="sn">4</span><span><b>Condizione Xc=0:</b> 4+6λ=0 → λ=–2/3</span></div>
+    <div class="step"><span class="sn">5</span><span><b>Sostituzione λ=–2/3 (×3):</b> x²+y²–14y–20=0</span></div>
+    <div class="res">x²+y²–14y–20=0  →  centro (0,7),  r=√69≈8.3</div>
+    <canvas id="e1"></canvas>
+  </div>
+</div>
+
+<div class="ex" id="es2">
+  <div class="ex-head"><span class="pill imp">Esempio 2</span><span style="font-size:13px;font-weight:500">Fascio improprio · Passaggio per un punto</span></div>
+  <div class="ex-body">
+    <div class="fb">C: x²+y²–4x–2y+1=0 &nbsp; O=(2,1) r=2<br>r₀: x+2y–5=0</div>
+    <p><b>Richiesta:</b> trovare la circonferenza passante per A=(0,2).</p>
+    <div class="step"><span class="sn">1</span><span>A∉C (=1≠0) ✓ &nbsp; A∉r₀ (=–1≠0) ✓</span></div>
+    <div class="step"><span class="sn">2</span><span><b>Fascio:</b> x²+y²+(–4+λ)x+(–2+2λ)y+(1–5λ)=0</span></div>
+    <div class="step"><span class="sn">3</span><span><b>Imponiamo A=(0,2):</b> 4+(–2+2λ)·2+(1–5λ)=0 → 1–λ=0 → λ=1</span></div>
+    <div class="step"><span class="sn">4</span><span><b>λ=1:</b> x²+y²–3x–4=0</span></div>
+    <div class="res">x²+y²–3x–4=0  →  centro (3/2,0),  r=5/2</div>
+    <div class="step"><span class="sn">5</span><span><b>Verifica:</b> 0+4–0–4=0 ✓</span></div>
+    <canvas id="e2"></canvas>
+  </div>
+</div>
+
+<div class="ex" id="es3">
+  <div class="ex-head"><span class="pill own">Esempio 3</span><span style="font-size:13px;font-weight:500">Fascio proprio · Tangenti esternamente · Raggio assegnato</span></div>
+  <div class="ex-body">
+    <div class="fb">C₁: x²+y²–4x+3=0 &nbsp; O₁=(2,0) r₁=1<br>C₂: x²+y²–12x+27=0 &nbsp; O₂=(6,0) r₂=3</div>
+    <p>d(O₁,O₂)=4=r₁+r₂ → <b>tangenti esternamente</b> in P=(3,0). <b>Richiesta:</b> r=2.</p>
+    <div class="step"><span class="sn">1</span><span><b>Fascio:</b> (1+λ)(x²+y²)+(–4–12λ)x+(3+27λ)=0</span></div>
+    <div class="step"><span class="sn">2</span><span><b>r(λ)=|3λ–1|/|1+λ|;</b> poniamo r=2 → |3λ–1|=2|1+λ|</span></div>
+    <div class="step"><span class="sn">3</span><span>Caso 1: λ=3 → x²+y²–10x+21=0, centro (5,0), r=2 ✓</span></div>
+    <div class="step"><span class="sn">4</span><span>Caso 2: λ=–1/5 → x²+y²–2x–3=0, centro (1,0), r=2 ✓</span></div>
+    <div class="res">x²+y²–10x+21=0 &nbsp; e &nbsp; x²+y²–2x–3=0</div>
+    <div class="tip">I centri (5,0) e (1,0) sono simmetrici rispetto al punto di tangenza P=(3,0).</div>
+    <canvas id="e3"></canvas>
+  </div>
+</div>
+
+<div class="ex" id="es4">
+  <div class="ex-head"><span class="pill own">Esempio 4</span><span style="font-size:13px;font-weight:500">Fascio proprio · Secanti · Centro sulla bisettrice y=x</span></div>
+  <div class="ex-body">
+    <div class="fb">C₁: x²+y²–4y=0 &nbsp; O₁=(0,2) r₁=2<br>C₂: x²+y²–4x=0 &nbsp; O₂=(2,0) r₂=2</div>
+    <p>Punti base P₁=(0,0) e P₂=(2,2). <b>Richiesta:</b> centro su y=x.</p>
+    <div class="step"><span class="sn">1</span><span><b>Fascio:</b> (1+λ)(x²+y²)–4λx–4y=0</span></div>
+    <div class="step"><span class="sn">2</span><span><b>Centro:</b> Xc=2λ/(1+λ), Yc=2/(1+λ)</span></div>
+    <div class="step"><span class="sn">3</span><span><b>Yc=Xc:</b> 2=2λ → λ=1</span></div>
+    <div class="step"><span class="sn">4</span><span><b>λ=1:</b> x²+y²–2x–2y=0</span></div>
+    <div class="res">x²+y²–2x–2y=0  →  centro (1,1),  r=√2</div>
+    <canvas id="e4"></canvas>
+  </div>
+</div>
+
+<div class="ex" id="es5">
+  <div class="ex-head"><span class="pill own">Esempio 5</span><span style="font-size:13px;font-weight:500">Fascio proprio · Secanti · Tangente a una retta</span></div>
+  <div class="ex-body">
+    <div class="fb">C₁: x²+y²–6x+2y+6=0 &nbsp; O₁=(3,–1) r₁=2<br>C₂: x²+y²–2x–2y–2=0 &nbsp; O₂=(1,1) r₂=2<br>ℓ: x+y–4=0</div>
+    <p><b>Richiesta:</b> trovare la circonferenza del fascio tangente a ℓ.</p>
+    <div class="step"><span class="sn">1</span><span><b>d(centro generico, ℓ) = √2 costante per ogni λ</b></span></div>
+    <div class="note">Poiché la distanza è costante, tangenza ⟺ r=√2.</div>
+    <div class="step"><span class="sn">2</span><span>r(λ)=√2 → λ=1 (unica soluzione)</span></div>
+    <div class="step"><span class="sn">3</span><span><b>λ=1:</b> x²+y²–4x+2=0</span></div>
+    <div class="res">x²+y²–4x+2=0  →  centro (2,0),  r=√2</div>
+    <div class="step"><span class="sn">4</span><span><b>Verifica:</b> d((2,0),ℓ)=2/√2=√2=r ✓</span></div>
+    <canvas id="e5"></canvas>
+  </div>
+</div>
+
+<div class="ex" id="es6">
+  <div class="ex-head"><span class="pill imp">Esempio 6</span><span style="font-size:13px;font-weight:500">Fascio improprio · Centro su una retta</span></div>
+  <div class="ex-body">
+    <div class="fb">C: x²+y²–4x–6y+8=0 &nbsp; O=(2,3) r=√5<br>r₀: x+y–3=0</div>
+    <p><b>Richiesta:</b> trovare la circonferenza con centro su 3x–y–1=0.</p>
+    <div class="step"><span class="sn">1</span><span><b>Fascio:</b> x²+y²+(–4+λ)x+(–6+λ)y+(8–3λ)=0</span></div>
+    <div class="step"><span class="sn">2</span><span><b>Centro:</b> Xc=(4–λ)/2, Yc=(6–λ)/2</span></div>
+    <div class="step"><span class="sn">3</span><span><b>3Xc–Yc–1=0:</b> 6–2λ=2 → λ=2</span></div>
+    <div class="step"><span class="sn">4</span><span><b>λ=2:</b> x²+y²–2x–4y+2=0</span></div>
+    <div class="res">x²+y²–2x–4y+2=0  →  centro (1,2),  r=√3</div>
+    <canvas id="e6"></canvas>
+  </div>
+</div>
+
+<div class="ex" id="es7">
+  <div class="ex-head"><span class="pill imp">Esempio 7</span><span style="font-size:13px;font-weight:500">Fascio improprio · Tangente a retta verticale · Due soluzioni</span></div>
+  <div class="ex-body">
+    <div class="fb">C: x²+y²–16=0 &nbsp; O=(0,0) r=4<br>r₀: y=0</div>
+    <p><b>Richiesta:</b> trovare le circonferenze del fascio tangenti a x=5.</p>
+    <div class="step"><span class="sn">1</span><span><b>Fascio:</b> x²+y²+λy–16=0; centro=(0,–λ/2), r=√(λ²/4+16)</span></div>
+    <div class="step"><span class="sn">2</span><span><b>d(centro, x=5)=r:</b> 25=λ²/4+16 → λ²=36 → λ=±6</span></div>
+    <div class="step"><span class="sn">3</span><span>λ=+6: x²+y²+6y–16=0, centro (0,–3), r=5 ✓</span></div>
+    <div class="step"><span class="sn">4</span><span>λ=–6: x²+y²–6y–16=0, centro (0,+3), r=5 ✓</span></div>
+    <div class="res">x²+y²+6y–16=0 &nbsp; e &nbsp; x²+y²–6y–16=0</div>
+    <div class="tip">Due soluzioni simmetriche rispetto all'asse x.</div>
+    <canvas id="e7"></canvas>
+  </div>
+</div>
+
+<div class="ex" id="es8">
+  <div class="ex-head"><span class="pill mix">Esempio 8</span><span style="font-size:13px;font-weight:500">Determinazione dei punti base del fascio</span></div>
+  <div class="ex-body">
+    <div class="fb">C₁: x²+y²–2x–4y+1=0 &nbsp; O₁=(1,2) r₁=2<br>C₂: x²+y²+2x–2y–3=0 &nbsp; O₂=(–1,1) r₂=√5</div>
+    <p><b>Richiesta:</b> trovare i punti di intersezione delle generatrici.</p>
+    <div class="step"><span class="sn">1</span><span><b>Asse radicale:</b> –4x–2y+4=0 → y=2–2x</span></div>
+    <div class="step"><span class="sn">2</span><span><b>Sostituzione in C₁:</b> 5x²–2x–3=0</span></div>
+    <div class="step"><span class="sn">3</span><span>Δ=64 → x=(2±8)/10 → x₁=1, x₂=–3/5</span></div>
+    <div class="step"><span class="sn">4</span><span>P₁=(1,0): C₁=0 ✓ C₂=0 ✓ &nbsp;&nbsp; P₂=(–3/5, 16/5): verifica analoga ✓</span></div>
+    <div class="res">P₁ = (1, 0) &nbsp;&nbsp;&nbsp; P₂ = (–3/5, 16/5)</div>
+    <canvas id="e8"></canvas>
+  </div>
+</div>
+
+<hr>
+<h2 id="schema">6. Schema riassuntivo</h2>
+<table><thead><tr><th>Tipo</th><th>Equazione</th><th>λ=–1</th><th>Esempi</th></tr></thead>
+<tbody>
+<tr><td>Proprio, secanti</td><td style="font-family:monospace;font-size:12px">C₁+λC₂=0</td><td>Retta PQ</td><td>1,4,5,8</td></tr>
+<tr><td>Proprio, tangenti</td><td style="font-family:monospace;font-size:12px">C₁+λC₂=0</td><td>Tang. comune in P</td><td>3</td></tr>
+<tr><td>Improprio</td><td style="font-family:monospace;font-size:12px">C+λr=0</td><td>La retta r</td><td>2,6,7</td></tr>
+</tbody></table>
+<table style="margin-top:.8rem"><thead><tr><th>Condizione aggiuntiva</th><th>Come si impone</th><th>Soluzioni</th></tr></thead>
+<tbody>
+<tr><td>Passaggio per A</td><td>Sostituisci (x,y)=A → risolvi in λ</td><td>1</td></tr>
+<tr><td>Centro su retta</td><td>Sostituisci Xc(λ),Yc(λ) → risolvi</td><td>1</td></tr>
+<tr><td>Raggio r=k</td><td>r(λ)=k → eq. in λ (spesso 2°)</td><td>0,1 o 2</td></tr>
+<tr><td>Tangente a ℓ</td><td>d(centro,ℓ)=r(λ) → eq. in λ</td><td>0,1 o 2</td></tr>
+<tr><td>Punti base</td><td>Asse radicale + sostituzione in C₁</td><td>0,1 o 2 punti</td></tr>
+</tbody></table>
+<div class="tip"><b>Strategia universale in 4 passi:</b><br>
+① Scrivi il fascio: C₁+λC₂=0 oppure C+λr=0.<br>
+② Ricava Xc(λ), Yc(λ) e, se serve, r(λ).<br>
+③ Imponi la condizione → equazione in λ → risolvi.<br>
+④ Sostituisci ogni λ nel fascio. Verifica sempre.</div>
+</main>
+
+<script>
+(function(){
+"use strict";
+
+/* ── palette ── */
+var BLU="#185FA5", BLU2="#0C447C", GRN="#0F6E56", AMB="#854F0B",
+    PNK="#993556", GRY="rgba(0,0,0,.18)", AXS="rgba(0,0,0,.30)",
+    TXT="#555", TXTS="#888", BG="#fafaf8";
+
+/* ── canvas factory ──
+   Crea un sistema di coordinate cartesiane isotropo (stessa scala su x e y).
+   xmid,ymid = centro da mostrare; unitsW = unità visibili in larghezza.
+   L'altezza viene calcolata di conseguenza per mantenere proporzioni 4:3.
+*/
+function makeG(id, xmid, ymid, unitsW){
+  var cv = document.getElementById(id);
+  if(!cv) return null;
+  var dpr = window.devicePixelRatio||1;
+  var W   = cv.parentElement.clientWidth||620;
+  var H   = Math.round(W * 0.56);          /* rapporto 16:9 circa */
+  cv.width  = W*dpr; cv.height = H*dpr;
+  cv.style.width  = W+"px";
+  cv.style.height = H+"px";
+  var ctx = cv.getContext("2d");
+  ctx.scale(dpr, dpr);
+
+  var s  = W / unitsW;                     /* pixel per unità */
+  var ox = W/2 - xmid*s;                   /* origine x in pixel */
+  var oy = H/2 + ymid*s;                   /* origine y in pixel */
+
+  /* sfondo */
+  ctx.fillStyle = BG;
+  ctx.fillRect(0,0,W,H);
+
+  /* griglia leggera */
+  ctx.strokeStyle = "rgba(0,0,0,.06)";
+  ctx.lineWidth   = 1;
+  var x0 = Math.ceil(xmid - unitsW/2);
+  var x1 = Math.floor(xmid + unitsW/2);
+  var unitsH = H/s;
+  var y0 = Math.ceil(ymid - unitsH/2);
+  var y1 = Math.floor(ymid + unitsH/2);
+  for(var xi=x0; xi<=x1; xi++){
+    ctx.beginPath(); ctx.moveTo(ox+xi*s,0); ctx.lineTo(ox+xi*s,H); ctx.stroke();
+  }
+  for(var yi=y0; yi<=y1; yi++){
+    ctx.beginPath(); ctx.moveTo(0,oy-yi*s); ctx.lineTo(W,oy-yi*s); ctx.stroke();
+  }
+
+  /* assi */
+  ctx.strokeStyle = AXS; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(0,oy); ctx.lineTo(W,oy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(ox,0); ctx.lineTo(ox,H); ctx.stroke();
+
+  /* frecce assi */
+  function arr(px,py,dir){
+    ctx.fillStyle=AXS; ctx.beginPath();
+    if(dir==="r"){ ctx.moveTo(px,py); ctx.lineTo(px-8,py-4); ctx.lineTo(px-8,py+4); }
+    else          { ctx.moveTo(px,py); ctx.lineTo(px-4,py+8); ctx.lineTo(px+4,py+8); }
+    ctx.closePath(); ctx.fill();
+  }
+  arr(W-2, oy, "r");
+  arr(ox, 2, "u");
+
+  /* tick e numeri */
+  ctx.fillStyle = TXTS;
+  ctx.font = "11px system-ui";
+  ctx.textAlign = "center";
+  for(var xi=x0; xi<=x1; xi++){
+    if(xi===0) continue;
+    var px = ox+xi*s;
+    if(px<12||px>W-12) continue;
+    ctx.beginPath(); ctx.arc(px,oy,2,0,2*Math.PI); ctx.fillStyle="rgba(0,0,0,.3)"; ctx.fill();
+    ctx.fillStyle=TXTS; ctx.fillText(xi, px, oy+14);
+  }
+  ctx.textAlign="right";
+  for(var yi=y0; yi<=y1; yi++){
+    if(yi===0) continue;
+    var py = oy-yi*s;
+    if(py<12||py>H-12) continue;
+    ctx.beginPath(); ctx.arc(ox,py,2,0,2*Math.PI); ctx.fillStyle="rgba(0,0,0,.3)"; ctx.fill();
+    ctx.fillStyle=TXTS; ctx.fillText(yi, ox-6, py+4);
+  }
+  /* etichette assi */
+  ctx.fillStyle=TXTS; ctx.font="bold 11px system-ui"; ctx.textAlign="left";
+  ctx.fillText("x", W-14, oy-6);
+  ctx.textAlign="center";
+  ctx.fillText("y", ox+8, 10);
+
+  /* ── metodi di disegno ── */
+  var g = {ctx:ctx, s:s, ox:ox, oy:oy, W:W, H:H};
+
+  /* circonferenza */
+  g.circ = function(cx,cy,r,col,lw,dash){
+    ctx.save();
+    ctx.strokeStyle=col; ctx.lineWidth=lw||2;
+    ctx.setLineDash(dash||[]);
+    ctx.beginPath(); ctx.arc(ox+cx*s, oy-cy*s, r*s, 0, 2*Math.PI);
+    ctx.stroke(); ctx.restore();
+  };
+
+  /* punto */
+  g.dot = function(cx,cy,r,col){
+    ctx.fillStyle=col||TXT;
+    ctx.beginPath(); ctx.arc(ox+cx*s, oy-cy*s, r||5, 0, 2*Math.PI);
+    ctx.fill();
+  };
+
+  /* segmento */
+  g.seg = function(x1,y1,x2,y2,col,lw,dash){
+    ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=lw||1.5;
+    ctx.setLineDash(dash||[]);
+    ctx.beginPath(); ctx.moveTo(ox+x1*s,oy-y1*s); ctx.lineTo(ox+x2*s,oy-y2*s);
+    ctx.stroke(); ctx.restore();
+  };
+
+  /* retta ax+by+c=0 clippata al canvas */
+  g.line = function(a,b,c,col,lw,dash){
+    var pts=[];
+    /* intersezione con i 4 bordi del canvas */
+    var borders=[
+      {at:function(t){return [t,(- a*t-c)/b];},  valid:function(p){return Math.abs(b)>1e-9;}},
+      {at:function(t){return [(-b*t-c)/a, t];},   valid:function(p){return Math.abs(a)>1e-9;}}
+    ];
+    /* approccio diretto: campiona xmin→xmax se b!=0, else linea verticale */
+    var xmin = (0-ox)/s, xmax=(W-ox)/s;
+    var ymin = (oy-H)/s, ymax= oy/s;
+    if(Math.abs(b)>1e-9){
+      pts.push([xmin, (-a*xmin-c)/b]);
+      pts.push([xmax, (-a*xmax-c)/b]);
+    } else {
+      var vx=-c/a;
+      pts.push([vx, ymin]);
+      pts.push([vx, ymax]);
+    }
+    this.seg(pts[0][0],pts[0][1],pts[1][0],pts[1][1],col,lw,dash);
+  };
+
+  /* etichetta con sfondo bianco per evitare sovrapposizioni */
+  g.lbl = function(txt,x,y,col,align,sz,bg){
+    var px=ox+x*s, py=oy-y*s;
+    ctx.font=(sz||12)+"px system-ui";
+    ctx.textAlign=align||"left";
+    if(bg!==false){
+      var w=ctx.measureText(txt).width;
+      var pad=3;
+      var bx = (align==="center") ? px-w/2-pad : (align==="right") ? px-w-pad : px-pad;
+      ctx.fillStyle="rgba(250,250,248,.88)";
+      ctx.fillRect(bx, py-parseInt(sz||12)-1, w+pad*2, parseInt(sz||12)+6);
+    }
+    ctx.fillStyle=col||TXT;
+    ctx.fillText(txt, px, py);
+  };
+
+  return g;
+}
+
+/* ═══════════════════════════════════════════
+   FIG 0 — prerequisiti: una circonferenza
+   range x: –5..7, y: –4..5  →  unitsW=12, centro (1,0.5)
+═══════════════════════════════════════════ */
+(function(){
+  var g=makeG("g0",0,0.5,13); if(!g)return;
+  g.circ(1,1,3,BLU,2.5);
+  g.dot(1,1,5,BLU);
+  var ang=Math.PI/6;
+  g.seg(1,1,1+3*Math.cos(ang),1+3*Math.sin(ang),AMB,1.5,[4,3]);
+  g.lbl("r = 3", 1+3*Math.cos(ang)/2+0.15, 1+3*Math.sin(ang)/2+0.1, AMB,"left",12);
+  g.lbl("O = (1, 1)", 1.25, 0.6, BLU,"left",12);
+  g.lbl("C : x\u00B2+y\u00B2\u22122x\u22122y\u22127=0", -4.5, 4.3, BLU,"left",12);
+  g.lbl("centro=(1,1)   raggio=3", -4.5, 3.4, TXT,"left",11);
+})();
+
+/* ═══════════════════════════════════════════
+   FIG 1 — fascio: due generatrici + 4 elementi + asse radicale
+   C1: centro(–1,0) r=√10,  C2: centro(3,0) r=√18
+   asse radicale: x=0
+═══════════════════════════════════════════ */
+(function(){
+  var g=makeG("g1",0,0,17); if(!g)return;
+  /* elementi del fascio (tratteggiati, grigio) */
+  var lms=[0.5,1.8,4,-2.5];
+  for(var i=0;i<lms.length;i++){
+    var lm=lms[i];
+    var D=(2+lm*(-6))/(1+lm), F=(-9+lm*(-9))/(1+lm);
+    var cx=-D/2, r2=cx*cx-F;
+    if(r2>0.1) g.circ(cx,0,Math.sqrt(r2),"rgba(0,0,0,.15)",1.2,[5,4]);
+  }
+  /* generatrici */
+  g.circ(-1,0,Math.sqrt(10),BLU,2.5);
+  g.circ( 3,0,Math.sqrt(18),GRN,2.5);
+  /* asse radicale */
+  g.line(1,0,0,AMB,1.8,[7,4]);
+  /* punti base */
+  g.dot(0, 3,6,AMB); g.dot(0,-3,6,AMB);
+  /* etichette ben distanziate */
+  g.lbl("C\u2081  (O\u2081=\u20131,0, r=\u221a10)", -7.5, 3.8, BLU,"left",12);
+  g.lbl("C\u2082  (O\u2082=3,0, r=\u221a18)", 1.0, -5.5, GRN,"left",12);
+  g.lbl("P = (0, 3)",  0.4,  3.3, AMB,"left",12);
+  g.lbl("Q = (0,\u20133)", 0.4, -3.5, AMB,"left",12);
+  g.lbl("asse radicale: x = 0", 0.3, 6.8, AMB,"left",12);
+  g.lbl("elementi del fascio (tratteggiati)", -7.5, -6.2, GRY,"left",11);
+})();
+
+/* ═══════════════════════════════════════════
+   FIG 2 — tre casi dell'asse radicale
+   Tre coppie disposte in orizzontale
+═══════════════════════════════════════════ */
+(function(){
+  var g=makeG("g2",1,0,22); if(!g)return;
+  /* CASO 1: secanti  —  sx */
+  g.circ(-8,0,2.2,BLU,2); g.circ(-5,0,1.8,GRN,2);
+  g.line(1,0,6.4,AMB,1.5,[6,3]);
+  g.lbl("secanti",-9.5,3.5,TXT,"left",12);
+  g.lbl("asse rad.",-6.2,-3.2,AMB,"left",11);
+
+  /* CASO 2: tangenti  —  centro */
+  g.circ(1,0,2,BLU,2); g.circ(5,0,2,GRN,2);
+  g.line(1,0,-3,AMB,1.5,[6,3]);
+  g.dot(3,0,5,AMB);
+  g.lbl("tangenti",0.2,3.5,TXT,"left",12);
+  g.lbl("P",3.2,0.4,AMB,"left",12);
+  g.lbl("asse rad.",3.2,-2.8,AMB,"left",11);
+
+  /* CASO 3: disgiunte  —  dx */
+  g.circ(9,0,1.2,BLU,2); g.circ(11.2,0,0.9,GRN,2);
+  g.line(1,0,-10.1,AMB,1.5,[6,3]);
+  g.lbl("disgiunte",7.8,3.5,TXT,"left",12);
+  g.lbl("asse rad.",10.1,-2.0,AMB,"left",11);
+
+  g.lbl("In tutti e 3 i casi: asse radicale \u22a5 retta dei centri",-10,-4.8,AMB,"left",11);
+})();
+
+/* ═══════════════════════════════════════════
+   FIG 3 — fascio proprio vs fascio improprio
+═══════════════════════════════════════════ */
+(function(){
+  var g=makeG("g3",1,0,18); if(!g)return;
+  /* PROPRIO (sx) */
+  g.circ(-5,0,2.5,BLU,2.5); g.circ(-1.5,0,2.5,GRN,2.5);
+  var lms2=[-0.4,0.6,2.5];
+  for(var i=0;i<lms2.length;i++){
+    var lm=lms2[i], D=6/(1+lm), F=-6.25/(1+lm), cx=-D/2, r2=cx*cx-F;
+    if(r2>0.1) g.circ(cx,0,Math.sqrt(r2),"rgba(0,0,0,.14)",1.2,[4,3]);
+  }
+  g.lbl("Fascio PROPRIO", -7.5, 5.5, BLU2,"left",13);
+  g.lbl("(generatrici secanti)", -7.5, 4.6, TXT,"left",11);
+
+  /* separatore */
+  g.seg(1,-5.5,1,5.5,"rgba(0,0,0,.1)",1,[3,3]);
+
+  /* IMPROPRIO (dx): C centro(5,0) r=3, r0: y=1 */
+  g.circ(5,0,3,BLU,2.5);
+  g.line(0,1,-1,GRN,2,[6,3]);
+  var lms3=[1.5,3,-1.5];
+  for(var i=0;i<lms3.length;i++){
+    var lm=lms3[i], cy=-lm/2, F2=-9-lm, r2=1+cy*cy-F2;
+    if(r2>0.1) g.circ(1,cy,Math.sqrt(r2),"rgba(0,0,0,.14)",1.2,[4,3]);
+  }
+  g.lbl("Fascio IMPROPRIO", 2.5, 5.5, BLU2,"left",13);
+  g.lbl("(una generatrice \u00e8 una retta)", 2.5, 4.6, TXT,"left",11);
+  g.lbl("r\u2080: y = 1", 7.5, 1.4, GRN,"left",12);
+})();
+
+/* ═══════════════════════════════════════════
+   ES 1 — fascio proprio secanti, centro su asse y
+   C1: O(2,1) r=3,  C2: O(3,–2) r=3,  Sol: O(0,7) r=√69
+═══════════════════════════════════════════ */
+(function(){
+  var g=makeG("e1",1,-2,18); if(!g)return;
+  g.circ(2, 1, 3, BLU, 2.5);
+  g.circ(3,-2, 3, GRN, 2.5);
+  g.circ(0, 7, Math.sqrt(69), AMB, 2, [6,3]);
+  g.line(1,-3,-4,"rgba(0,0,0,.25)",1.2,[5,3]);
+  g.dot(2, 1, 5, BLU);
+  g.dot(3,-2, 5, GRN);
+  g.dot(0, 7, 5, AMB);
+  /* etichette ben separate */
+  g.lbl("C\u2081  O\u2081=(2,1)  r=3",   3.5,  3.2, BLU,"left",12);
+  g.lbl("C\u2082  O\u2082=(3,\u22122)  r=3", 3.5, -4.0, GRN,"left",12);
+  g.lbl("Soluzione",                   0.4,  5.2, AMB,"left",12);
+  g.lbl("O=(0,7)  r=\u221a69\u22488.3", 0.4,  4.3, AMB,"left",11);
+  g.lbl("asse radicale: x\u22123y\u22124=0", -7.5, -7.5, "rgba(0,0,0,.4)","left",11);
+})();
+
+/* ═══════════════════════════════════════════
+   ES 2 — fascio improprio, passaggio per punto
+   C: O(2,1) r=2,  r0: x+2y–5=0,  A=(0,2),  Sol: O(1.5,0) r=2.5
+═══════════════════════════════════════════ */
+(function(){
+  var g=makeG("e2",2,1,12); if(!g)return;
+  g.circ(2,1,2,BLU,2.5);
+  g.line(1,2,-5,GRN,1.8,[6,3]);
+  g.circ(1.5,0,2.5,AMB,2.2,[6,3]);
+  g.dot(0,2,6,AMB);
+  g.dot(2,1,5,BLU);
+  g.dot(1.5,0,5,AMB);
+  g.lbl("C   O=(2,1)  r=2",  2.5, 2.7, BLU,"left",12);
+  g.lbl("r\u2080: x+2y\u22125=0", 1.2,-3.5, GRN,"left",12);
+  g.lbl("A = (0, 2)", -4.8, 2.2, AMB,"left",12);
+  g.lbl("Soluzione: O=(3/2,0)  r=5/2", -4.8,-4.5, AMB,"left",12);
+})();
+
+/* ═══════════════════════════════════════════
+   ES 3 — generatrici tangenti, raggio assegnato
+   C1: O(2,0) r=1,  C2: O(6,0) r=3,  P=(3,0)
+   Sol1: O(5,0) r=2,  Sol2: O(1,0) r=2
+═══════════════════════════════════════════ */
+(function(){
+  var g=makeG("e3",4,0,13); if(!g)return;
+  g.circ(2,0,1,BLU,2.5);
+  g.circ(6,0,3,GRN,2.5);
+  g.circ(5,0,2,AMB,2.2,[6,3]);
+  g.circ(1,0,2,PNK,2.2,[6,3]);
+  g.dot(3,0,6,"rgba(0,0,0,.45)");
+  g.dot(2,0,5,BLU); g.dot(6,0,5,GRN);
+  g.dot(5,0,5,AMB); g.dot(1,0,5,PNK);
+  g.lbl("C\u2081  O=(2,0)  r=1",  2.2, 1.5, BLU,"left",12);
+  g.lbl("C\u2082  O=(6,0)  r=3",  5.5, 3.8, GRN,"left",12);
+  g.lbl("P=(3,0)", 3.1, 0.5, "rgba(0,0,0,.55)","left",11);
+  g.lbl("\u03bb=3:  O=(5,0)  r=2",   4.2,-3.5, AMB,"left",12);
+  g.lbl("\u03bb=\u20131/5:  O=(1,0)  r=2",-4.5,-3.5, PNK,"left",12);
+})();
+
+/* ═══════════════════════════════════════════
+   ES 4 — centro sulla bisettrice y=x
+   C1: O(0,2) r=2,  C2: O(2,0) r=2
+   Punti base: (0,0) e (2,2),  Sol: O(1,1) r=√2
+═══════════════════════════════════════════ */
+(function(){
+  var g=makeG("e4",1,1,10); if(!g)return;
+  g.circ(0,2,2,BLU,2.5);
+  g.circ(2,0,2,GRN,2.5);
+  g.circ(1,1,Math.SQRT2,AMB,2.2,[6,3]);
+  g.line(1,-1,0,AMB,1.2,[4,3]);
+  g.dot(0,0,5,"#666"); g.dot(2,2,5,"#666"); g.dot(1,1,6,AMB);
+  g.lbl("C\u2081  O=(0,2)  r=2", -4.5, 4.3, BLU,"left",12);
+  g.lbl("C\u2082  O=(2,0)  r=2",  2.5,-3.0, GRN,"left",12);
+  g.lbl("P\u2081=(0,0)", -4.5,-0.4,"#666","left",12);
+  g.lbl("P\u2082=(2,2)",  2.2, 2.4,"#666","left",12);
+  g.lbl("y = x (bisettrice)", 1.5, 3.8, AMB,"left",11);
+  g.lbl("Soluzione: O=(1,1)  r=\u221a2", -4.5,-3.5, AMB,"left",12);
+})();
+
+/* ═══════════════════════════════════════════
+   ES 5 — tangente a una retta ℓ
+   C1: O(3,–1) r=2,  C2: O(1,1) r=2,  ℓ: x+y–4=0
+   Sol: O(2,0) r=√2
+═══════════════════════════════════════════ */
+(function(){
+  var g=makeG("e5",2,0,11); if(!g)return;
+  g.circ(3,-1,2,BLU,2.5);
+  g.circ(1, 1,2,GRN,2.5);
+  g.circ(2, 0,Math.SQRT2,AMB,2.2,[6,3]);
+  g.line(1,1,-4,AMB,1.8,[6,3]);
+  /* punto di tangenza: proiezione di (2,0) su x+y=4 */
+  g.dot(3,1,5,AMB);
+  g.seg(2,0,3,1,AMB,1,[3,3]);
+  g.dot(3,-1,5,BLU); g.dot(1,1,5,GRN); g.dot(2,0,6,AMB);
+  g.lbl("C\u2081  O=(3,\u22121)  r=2", 2.6,-3.5, BLU,"left",12);
+  g.lbl("C\u2082  O=(1,1)  r=2", -4.8, 3.2, GRN,"left",12);
+  g.lbl("\u2113: x+y\u22124=0", 3.6, 0.7, AMB,"left",12);
+  g.lbl("punto di tangenza (3,1)", 3.1, 1.5, AMB,"left",11);
+  g.lbl("Soluzione: O=(2,0)  r=\u221a2", -4.8,-3.5, AMB,"left",12);
+})();
+
+/* ═══════════════════════════════════════════
+   ES 6 — fascio improprio, centro su 3x–y–1=0
+   C: O(2,3) r=√5,  r0: x+y–3=0,  condiz: 3x–y–1=0
+   Sol: O(1,2) r=√3
+═══════════════════════════════════════════ */
+(function(){
+  var g=makeG("e6",2,3,11); if(!g)return;
+  g.circ(2,3,Math.sqrt(5),BLU,2.5);
+  g.line(1,1,-3,GRN,1.8,[6,3]);
+  g.line(3,-1,-1,"rgba(0,0,0,.28)",1.2,[4,2]);
+  g.circ(1,2,Math.sqrt(3),AMB,2.2,[6,3]);
+  g.dot(2,3,5,BLU); g.dot(1,2,6,AMB);
+  g.lbl("C   O=(2,3)  r=\u221a5", 2.4, 5.5, BLU,"left",12);
+  g.lbl("r\u2080: x+y\u22123=0",  3.0, 0.2, GRN,"left",12);
+  g.lbl("3x\u2013y\u22121=0 (condiz.)", -4.5, 1.1, "rgba(0,0,0,.45)","left",11);
+  g.lbl("Soluzione: O=(1,2)  r=\u221a3", -4.5,-1.8, AMB,"left",12);
+})();
+
+/* ═══════════════════════════════════════════
+   ES 7 — fascio improprio, tangente a x=5
+   C: O(0,0) r=4,  r0: y=0,  Sol1: O(0,–3) r=5,  Sol2: O(0,3) r=5
+═══════════════════════════════════════════ */
+(function(){
+  var g=makeG("e7",0,0,18); if(!g)return;
+  g.circ(0,0,4,BLU,2.5);
+  /* y=0 è l'asse x: già disegnato, aggiungiamo solo etichetta */
+  g.circ(0,-3,5,AMB,2.2,[6,3]);
+  g.circ(0, 3,5,PNK,2.2,[6,3]);
+  g.line(1,0,-5,"rgba(0,0,0,.3)",1.5,[5,3]);
+  g.dot(5,-3,5,AMB); g.dot(5,3,5,PNK);
+  g.dot(0,0,5,BLU);  g.dot(0,-3,5,AMB); g.dot(0,3,5,PNK);
+  /* segmenti raggio verso x=5 */
+  g.seg(0,-3,5,-3,AMB,1,[3,3]);
+  g.seg(0, 3,5, 3,PNK,1,[3,3]);
+  g.lbl("C   O=(0,0)  r=4",  0.4, 4.0, BLU,"left",12);
+  g.lbl("r\u2080: y=0 (asse x)", -7.5,-0.6, GRN,"left",11);
+  g.lbl("x = 5", 5.15, 6.5, "rgba(0,0,0,.45)","left",11);
+  g.lbl("\u03bb=+6: O=(0,\u22123)  r=5", 0.4,-5.5, AMB,"left",12);
+  g.lbl("\u03bb=\u22126: O=(0,+3)  r=5", 0.4, 5.2, PNK,"left",12);
+})();
+
+/* ═══════════════════════════════════════════
+   ES 8 — punti base del fascio
+   C1: O(1,2) r=2,  C2: O(–1,1) r=√5
+   asse rad: 2x+y–2=0,  P1=(1,0),  P2=(–3/5,16/5)
+═══════════════════════════════════════════ */
+(function(){
+  var g=makeG("e8",0,2,12); if(!g)return;
+  g.circ( 1,2,2,           BLU,2.5);
+  g.circ(-1,1,Math.sqrt(5),GRN,2.5);
+  g.line(2,1,-2,AMB,1.8,[6,3]);
+  g.dot(1,   0,   6,"#555");
+  g.dot(-0.6,3.2, 6,"#555");
+  g.dot(1,2,5,BLU); g.dot(-1,1,5,GRN);
+  g.lbl("C\u2081  O=(1,2)  r=2",   1.4, 4.3, BLU,"left",12);
+  g.lbl("C\u2082  O=(\u22121,1)  r=\u221a5", -5.5,-1.5, GRN,"left",12);
+  g.lbl("asse radicale: 2x+y\u22122=0", 0.5, 5.8, AMB,"left",11);
+  g.lbl("P\u2081 = (1, 0)",    1.2, -0.7,"#555","left",12);
+  g.lbl("P\u2082 = (\u20133/5, 16/5)", -5.5, 3.9,"#555","left",12);
+})();
+
+/* ── nav smooth scroll ── */
+document.querySelectorAll("nav a").forEach(function(a){
+  a.addEventListener("click",function(e){
+    e.preventDefault();
+    var el=document.getElementById(this.getAttribute("href").slice(1));
+    if(el) el.scrollIntoView({behavior:"smooth"});
+  });
+});
+
+})();
+</script>
+</body>
+</html>
